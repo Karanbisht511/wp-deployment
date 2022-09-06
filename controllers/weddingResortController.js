@@ -26,8 +26,28 @@ exports.getWeddingResortById = async (req, res) => {
 };
 
 exports.createWeddingResort = async (req, res) => {
-  console.log("received Resort from frontend:", req.body);
-  const newWeddingResort = new weddingResort(req.body);
+  const image = req.file;
+  const otherDetails = JSON.parse(req.body.details);
+  const resortObj = {};
+
+  console.log("photo file:", image);
+  console.log("received details from frontend:", otherDetails);
+
+  if (image) {
+    resortObj.image = image;
+  } else {
+    res.send("image is required");
+  }
+
+  if (otherDetails) {
+    resortObj.details = otherDetails;
+  } else {
+    res.send("All field should be filled");
+  }
+
+  console.log(resortObj);
+
+  const newWeddingResort = new weddingResort(resortObj);
 
   const responseFromDb = await newWeddingResort
     .save()

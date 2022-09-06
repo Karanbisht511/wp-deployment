@@ -25,8 +25,26 @@ exports.getCosmetologistById = async (req, res) => {
 };
 
 exports.createCosmetologist = async (req, res) => {
-  console.log("received cosmetologist from frontend:", req.body);
-  const newCosmetologist = new cosmetologist(req.body);
+  const image = req.file;
+  const otherDetails = JSON.parse(req.body.details);
+  const cosmetologistObj = {};
+
+  console.log("photo file:", image);
+  console.log("received Resort from frontend:", otherDetails);
+
+  if (image) {
+    cosmetologistObj.image = image;
+  } else {
+    res.send("image is required");
+  }
+
+  if (otherDetails) {
+    cosmetologistObj.details = otherDetails;
+  } else {
+    res.send("All field should be filled");
+  }
+
+  const newCosmetologist = new cosmetologist(cosmetologistObj);
 
   const responseFromDb = await newCosmetologist
     .save()

@@ -26,8 +26,28 @@ exports.getVideographerById = async (req, res) => {
 };
 
 exports.createVideographer = async (req, res) => {
-  console.log("received Videographer from frontend:", req.body);
-  const newVideographer = new videographer(req.body);
+  const image = req.file;
+  const otherDetails = JSON.parse(req.body.details);
+  const videpgrapherObj = {};
+
+  console.log("photo file:", image);
+  console.log("received details from frontend:", otherDetails);
+
+  if (image) {
+    videpgrapherObj.image = image;
+  } else {
+    res.send("image is required");
+  }
+
+  if (otherDetails) {
+    videpgrapherObj.details = otherDetails;
+  } else {
+    res.send("All field should be filled");
+  }
+
+  console.log(videpgrapherObj);
+
+  const newVideographer = new videographer(videpgrapherObj);
 
   const responseFromDb = await newVideographer
     .save()

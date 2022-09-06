@@ -25,8 +25,29 @@ exports.getTravelAgencyById = async (req, res) => {
 };
 
 exports.createTravelAgency = async (req, res) => {
-  console.log("received Resort from frontend:", req.body);
-  const newtravelAgency = new travelAgency(req.body);
+  const image = req.file;
+  const otherDetails = JSON.parse(req.body.details);
+  // console.log("received Resort from frontend:", req.body);
+  const agencyObj = {};
+
+  console.log("photo file:", image);
+  console.log("received travel agency from frontend:", otherDetails);
+
+  if (image) {
+    agencyObj.image = image;
+  } else {
+    res.send("image is required");
+  }
+
+  if (otherDetails) {
+    agencyObj.details = otherDetails;
+  } else {
+    res.send("All field should be filled");
+  }
+
+  console.log(agencyObj);
+
+  const newtravelAgency = new travelAgency(agencyObj);
 
   const responseFromDb = await newtravelAgency
     .save()

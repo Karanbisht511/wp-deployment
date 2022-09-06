@@ -25,8 +25,26 @@ exports.getDecoratorById = async (req, res) => {
 };
 
 exports.createDecorator = async (req, res) => {
-  console.log("received Decorator from frontend:", req.body);
-  const newDecorator = new decorator(req.body);
+  const image = req.file;
+  const otherDetails = JSON.parse(req.body.details);
+  const decoratorObj = {};
+
+  console.log("photo file:", image);
+  console.log("received decorators details from frontend:", otherDetails);
+
+  if (image) {
+    decoratorObj.image = image;
+  } else {
+    res.send("image is required");
+  }
+
+  if (otherDetails) {
+    decoratorObj.details = otherDetails;
+  } else {
+    res.send("All field should be filled");
+  }
+
+  const newDecorator = new decorator(decoratorObj);
 
   const responseFromDb = await newDecorator
     .save()
