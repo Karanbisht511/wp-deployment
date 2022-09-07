@@ -13,14 +13,13 @@ const app = express();
 
 app.use(cors());
 app.use(bodyParser.json());
-// app.use(express.static("public"));
+app.use(express.static("public"));
 app.use(express.urlencoded({ extended: false }));
 
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
 
-app.use(express.static(path.join(__dirname, "build")));
-
 app.get("/", function (req, res) {
+  app.use(express.static(path.join(__dirname, "build")));
   res.sendFile(path.join(__dirname, "build", "index.html"));
 });
 
